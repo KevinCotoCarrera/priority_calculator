@@ -1,5 +1,4 @@
 <script lang="ts">
-	// --- Types ---
 	type Project = {
 		id: number;
 		name: string;
@@ -12,7 +11,6 @@
 		roadblocking: boolean;
 	};
 
-	// --- State ---
 	let projects: Project[] = $state([
 		{ id: 1, name: 'Restore', priority: 5 },
 		{ id: 2, name: 'Landing Page', priority: 2 },
@@ -27,22 +25,16 @@
 		{ name: 'Hero section', urgency: 3, projectId: 2, roadblocking: false }
 	]);
 
-	// --- Logic ---
-function compositePriority({ urgency, projectId, roadblocking }: Task): string {
-	const project = projects.find(p => p.id === projectId) ?? { priority: 1 };
-	const priority = project.priority;
+	function compositePriority({ urgency, projectId, roadblocking }: Task): string {
+		const project = projects.find(p => p.id === projectId) ?? { priority: 1 };
+		let points = (project.priority * 1.5) + urgency;
+		if (roadblocking) points += 2;
 
-	// Make project priority matter more
-	let points = (priority * 1.5) + (urgency * 1);
-	if (roadblocking) points += 2;
-
-	if (points >= 11) return 'A';
-	if (points >= 8) return 'B';
-	if (points >= 5.5) return 'C';
-	return 'D';
-}
-
-
+		if (points >= 11) return 'A';
+		if (points >= 8) return 'B';
+		if (points >= 5.5) return 'C';
+		return 'D';
+	}
 
 	function addTask(): void {
 		const firstProject = projects[0]?.id ?? 1;
@@ -68,7 +60,7 @@ function compositePriority({ urgency, projectId, roadblocking }: Task): string {
 </script>
 
 <!-- PROJECTS MANAGER -->
-<div class="bg-white shadow-xl rounded-2xl p-6 mb-8 max-w-xl mx-auto mt-10">
+<div class="bg-white shadow-xl rounded-2xl p-6 mb-8 w-full max-w-xl mx-auto mt-10">
 	<h2 class="font-bold text-2xl mb-4 text-gray-900 flex items-center gap-2">
 		<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><rect width="24" height="24" rx="7" fill="#10b981"/><path d="M8 12l2 2l4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 		Projects
@@ -86,26 +78,26 @@ function compositePriority({ urgency, projectId, roadblocking }: Task): string {
 			</li>
 		{/each}
 	</ul>
-	<div class="flex gap-4 mt-2">
-		<input class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="New project name" bind:value={newProjectName} />
-		<select class="border w-28 border-gray-300 rounded-lg px-2 py-2 text-sm" bind:value={newProjectPriority}>
+	<div class="flex flex-col sm:flex-row gap-4 mt-2">
+		<input class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm w-full sm:w-auto" placeholder="New project name" bind:value={newProjectName} />
+		<select class="border border-gray-300 rounded-lg px-2 py-2 text-sm w-full sm:w-28" bind:value={newProjectPriority}>
 			{#each [1,2,3,4,5] as prio}
 				<option value={prio}>Priority {prio}</option>
 			{/each}
 		</select>
-		<button type="button" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 transition" onclick={addProject}>
+		<button type="button" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 transition text-sm sm:text-base" onclick={addProject}>
 			Add
 		</button>
 	</div>
 </div>
 
 <!-- TASKS TABLE -->
-<div class="bg-white shadow-2xl rounded-2xl p-8 max-w-5xl mx-auto">
+<div class="bg-white shadow-2xl rounded-2xl p-4 sm:p-8 w-full max-w-6xl mx-auto overflow-x-auto">
 	<h2 class="font-black text-3xl mb-6 text-gray-900 flex items-center gap-2">
 		<svg width="30" height="30" fill="none" viewBox="0 0 24 24"><rect width="24" height="24" rx="7" fill="#6366f1"/><path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 		Task Priority Chart
 	</h2>
-	<table class="min-w-full table-fixed rounded-lg overflow-hidden">
+	<table class="min-w-[700px] w-full table-auto rounded-lg overflow-hidden text-sm">
 		<thead class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
 			<tr>
 				<th class="p-3 w-2/5">Task</th>
@@ -158,7 +150,7 @@ function compositePriority({ urgency, projectId, roadblocking }: Task): string {
 			{/each}
 		</tbody>
 	</table>
-	<button type="button" onclick={addTask} class="mt-6 px-5 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition">
+	<button type="button" onclick={addTask} class="mt-6 px-5 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition text-sm sm:text-base">
 		+ Add Task
 	</button>
 </div>
