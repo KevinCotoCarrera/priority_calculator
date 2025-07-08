@@ -32,24 +32,16 @@ function compositePriority({ urgency, projectId, roadblocking }: Task): string {
 	const project = projects.find(p => p.id === projectId) ?? { priority: 1 };
 	const priority = project.priority;
 
-	// High urgency & high project priority
-	if (urgency >= 4 && priority >= 4) return 'A';
+	// Make project priority matter more
+	let points = (priority * 1.5) + (urgency * 1);
+	if (roadblocking) points += 2;
 
-	// Roadblocking AND at least moderate urgency or priority (3+)
-	if (roadblocking && (urgency >= 3 || priority >= 3)) return 'A';
-
-	// Roadblocking but both urgency & priority are low (≤2) → B
-	if (roadblocking && urgency <= 2 && priority <= 2) return 'B';
-
-	// High urgency or high project priority (but not both) → B
-	if (urgency >= 4 || priority >= 4) return 'B';
-
-	// Moderate urgency or priority (3) → C
-	if (urgency === 3 || priority === 3) return 'C';
-
-	// Low everything
+	if (points >= 11) return 'A';
+	if (points >= 8) return 'B';
+	if (points >= 5.5) return 'C';
 	return 'D';
 }
+
 
 
 	function addTask(): void {
