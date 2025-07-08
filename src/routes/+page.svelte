@@ -94,9 +94,9 @@ function compositePriority({ urgency, projectId, roadblocking }: Task): string {
 			</li>
 		{/each}
 	</ul>
-	<div class="flex gap-2 mt-2">
+	<div class="flex gap-4 mt-2">
 		<input class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="New project name" bind:value={newProjectName} />
-		<select class="border border-gray-300 rounded-lg px-2 py-2 text-sm" bind:value={newProjectPriority}>
+		<select class="border w-28 border-gray-300 rounded-lg px-2 py-2 text-sm" bind:value={newProjectPriority}>
 			{#each [1,2,3,4,5] as prio}
 				<option value={prio}>Priority {prio}</option>
 			{/each}
